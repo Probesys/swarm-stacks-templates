@@ -1,0 +1,36 @@
+{
+    "version": "2",
+    "templates": [
+        {
+            "type": 2,
+            "title": "Traefik",
+            "description": "Traefik reverse proxy",
+            "note": "Deploys a base Traefik instance with dashboard enabled behind http-basic-auth",
+            "categories": ["proxy"],
+            "platform": "linux",
+            "logo": "http://stack-templates.cham.probesys.net/traefik.logo.png",
+            "repository": {
+            "url": "http://stack-templates.cham.probesys.net/",
+            "stackfile": "traefik-stack.yml"
+            },
+            "administrator_only": true,
+            "env": [
+                {
+                    "name": "TRAEFIK_URL",
+                    "label": "Traefik instance url",
+                    "description":"Traefik reverse proxy dashboard URL"
+                },
+                {
+                    "name": "TRAEFIK_AUTH_USER",
+                    "label": "Traefik dashboard user",
+                    "description":"Traefik dashboard user for http authentication"
+                },
+                {
+                    "name": "TRAEFIK_AUTH_PASSWD",
+                    "label": "Traefik dashboard auth password",
+                    "description":"Traefik dashboard password for http authentication, result of: echo $(htpasswd -nb $USER $PASSWD)"
+                }
+            ]
+        }
+    ]
+}
