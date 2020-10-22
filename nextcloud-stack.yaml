@@ -1,0 +1,95 @@
+version: "3"
+
+services:
+  db:
+    image: mariadb
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    networks:
+      - nextcloud-internal
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '2'
+          memory: '512M'
+      placement:
+        constraints:
+          - "node.role==manager"
+
+  app:
+    image: nextcloud
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - nextcloud:/var/www/html
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - REDIS_HOST=redis
+      - REDIS_HOST_PORT=6379
+      - REDIS_HOST_PASSWORD=${REDIS_PASSWD}
+      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
+      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
+      - NEXTCLOUD_TABLE_PREFIX=nc
+      - NEXTCLOUD_TRUSTED_DOMAINS=${NC_DOMAIN}
+      - TZ=Europe/Paris
+    restart: always
+    networks:
+      - nextcloud-internal
+      - traefik-public
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=traefik-public"
+        - "traefik.http.routers.nextcloud.entrypoints=web"
+        - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
+        - "traefik.http.routers.nextcloud.rule=Host(`nc-dev.cham.probesys.net`)"
+        - "traefik.http.middlewares.nextcloud.compress=true"
+      replicas: 1
+      resources:
+        limits:
+          cpus: '2'
+          memory: '512M'
+      placement:
+        constraints:
+          - "node.role==manager"
+
+  redis:
+    image: redis
+    command: redis-server --requirepass ${REDIS_PASSWD}
+    restart: always
+    volumes:
+      - redis_data:/data
+    networks:
+      - nextcloud-internal
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '2'
+          memory: '50M'
+      placement:
+        constraints:
+          - "node.role==manager"
+
+volumes:
+  db:
+  nextcloud:
+  redis_data:
+  
+networks:
+  traefik-public:
+    external: true
+  nextcloud-internal:
+    external: false

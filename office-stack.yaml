@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  collabora:
+    image: collabora/code
+    restart: unless-stopped
+    environment:
+      - domain=${NC_DOMAIN}
+      - extra_params=--o:ssl.enable=false --o:ssl.termination=false
+      - SLEEPFORDEBUGGER=0
+    networks:
+      - traefik-public
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=traefik-public"
+        - "traefik.http.services.office.loadbalancer.server.port=9980"
+        - "traefik.http.routers.office.rule=Host(`${OFFICE_URL}`)"
+      replicas: 1
+      resources:
+        limits:
+          cpus: '4'
+          memory: '1024M'
+      placement:
+        constraints:
+          - "node.role==worker"
+
+networks:
+  traefik-public:
+    external: true
+
+volumes:
+  collab_proxy_conf:
