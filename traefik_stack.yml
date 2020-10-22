@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  reverse-proxy:
+    image: traefik:v2.3.2
+    command:
+      # Expose dashboard
+      - "--api=true"
+      - "--api.dashboard=true"
+      # Use Docker as provider in Swarm mode
+      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+      - "--providers.docker.swarmMode=true"
+      - "--providers.docker.exposedbydefault=false"
+      # Traefik will use 'traefik-public' network
+      - "--providers.docker.network=traefik-public"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      #- "--certificatesresolvers.letsencryptresolver.acme.httpchallenge=true"
+      #- "--certificatesresolvers.letsencryptresolver.acme.httpchallenge.entrypoint=web"
+      #- "--certificatesresolvers.letsencryptresolver.acme.email=noc@probesys.com"
+      #- "--certificatesresolvers.letsencryptresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      # To persist certificates
+      #- traefik-certificates:/letsencrypt
+      # Traefik will listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - traefik-public
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=traefik-public"
+        # The following port will not be used but is needed for Traefik internal stuff
+        - "traefik.http.services.traefik.loadbalancer.server.port=1227"
+        - "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_URL}`)"
+        - "traefik.http.routers.traefik.entrypoints=web"
+        #- "traefik.http.routers.traefik.tls.certresolver=letsencryptresolver"
+        - "traefik.http.routers.traefik.service=api@internal"
+        - "traefik.http.routers.traefik.middlewares=auth"
+        # Generate basic auth password: echo $(htpasswd -nb $USER $PASSWD)
+        - "traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_AUTH_USER}:${TRAEFIK_AUTH_PASSWD}"
+
+volumes:
+  traefik-certificates:
+
+networks:
+  traefik-public:
+    external: true
