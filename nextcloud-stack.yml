@@ -58,13 +58,16 @@ services:
         - "traefik.http.routers.{{ env \"NC_DOMAIN\" }}.entrypoints=websecure"
         - "traefik.http.services.{{ env \"NC_DOMAIN\" }}.loadbalancer.server.port=80"
         - "traefik.http.routers.{{ env \"NC_DOMAIN\" }}.rule=Host(`${NC_DOMAIN}`)"
-        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}.compress=true"
         - "traefik.http.routers.{{ env \"NC_DOMAIN\" }}.tls.certresolver=myresolver"
         - "traefik.http.routers.{{ env \"NC_DOMAIN\" }}.tls=true"
-        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}.headers.framedeny=true"
-        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}.headers.sslredirect=true"
-        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}.redirectregex.regex=^https://(.*)/.well-known/(card|cal)dav"
-        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}.redirectregex.replacement=https://$${1}/remote.php/dav/"
+        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}-http.compress=true"
+        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}-sec.headers.customFrameOptionsValue=SAMEORIGIN"
+        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}-sec.headers.sslredirect=true"
+        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}-sec.headers.stsSeconds=15552000"
+        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}-sec.headers.stsIncludeSubdomains=true"
+        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}-dav.replacepathregex.regex=^/.well-known/ca(l|rd)dav"
+        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}-dav.replacepathregex.replacement=/remote.php/dav/"
+        - "traefik.http.routers.{{ env \"NC_DOMAIN\" }}.middlewares={{ env \"NC_DOMAIN\" }}-dav,{{ env \"NC_DOMAIN\" }}-http,{{ env \"NC_DOMAIN\" }}-sec"
 
       replicas: 1
       resources:
