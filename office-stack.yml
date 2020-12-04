@@ -6,13 +6,14 @@ services:
     restart: unless-stopped
     environment:
       - domain=${NC_DOMAIN}
-      - extra_params=--o:ssl.enable=false --o:ssl.termination=false
+      - extra_params=--o:ssl.enable=false --o:ssl.termination=true --o:net.post_allow.host[0]=::ffff:10\.[0-9\.]+ --o:storage.wopi.host[0]=::ffff:10\.[0-9\.]+ --o:storage.wopi.host[1]=${NC_DOMAIN}
       - SLEEPFORDEBUGGER=0
     networks:
       - public
     deploy:
       labels:
         - "traefik.enable=true"
+        - "traefik.passHostHeader=true"
         - "traefik.docker.network=public"
         - "traefik.http.services.{{ env \"OFFICE_URL\" }}.loadbalancer.server.port=9980"
         - "traefik.http.routers.{{ env \"OFFICE_URL\" }}.entrypoints=websecure"
