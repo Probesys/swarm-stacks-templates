@@ -9,7 +9,7 @@ services:
       - extra_params=--o:ssl.enable=false --o:ssl.termination=false
       - SLEEPFORDEBUGGER=0
     networks:
-      - traefik-public
+      - public
     deploy:
       labels:
         - "traefik.enable=true"
@@ -26,7 +26,7 @@ services:
           - "node.role==worker"
 
 networks:
-  traefik-public:
+  public:
     external: true
 
 volumes:
