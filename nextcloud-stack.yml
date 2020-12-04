@@ -31,6 +31,7 @@ services:
       - redis
     volumes:
       - nextcloud:/var/www/html
+      - /data/${NC_DOMAIN}_data:/var/www/html/data
     environment:
       - MYSQL_HOST=db
       - MYSQL_USER=${MYSQL_USER}
@@ -43,6 +44,8 @@ services:
       - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
       - NEXTCLOUD_TABLE_PREFIX=nc
       - NEXTCLOUD_TRUSTED_DOMAINS=${NC_DOMAIN}
+      - TRUSTED_PROXIES=10.0.0.0/8
+      - OVERWRITEPROTOCOL=https
       - TZ=Europe/Paris
     restart: always
     networks:
