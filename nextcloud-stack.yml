@@ -58,6 +58,10 @@ services:
         - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}.compress=true"
         - "traefik.http.routers.{{ env \"NC_DOMAIN\" }}.tls.certresolver=myresolver"
         - "traefik.http.routers.{{ env \"NC_DOMAIN\" }}.tls=true"
+        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}.headers.framedeny=true"
+        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}.headers.sslredirect=true"
+        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}.redirectregex.regex=^https://(.*)/.well-known/(card|cal)dav"
+        - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}.redirectregex.replacement=https://$${1}/remote.php/dav/"
 
       replicas: 1
       resources:
