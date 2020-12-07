@@ -8,7 +8,7 @@
             "note": "Deploys a Nextcloud instance",
             "categories": ["app"],
             "platform": "linux",
-            "logo": "https://stack-templates.probesys.com/nextcloud.logo.png",
+            "logo": "https://raw.githubusercontent.com/Probesys/swarm-stacks-templates/main/nextcloud.logo.png",
             "repository": {
                 "url": "https://github.com/Probesys/swarm-stacks-templates",
                 "stackfile": "nextcloud-stack.yml"
@@ -64,7 +64,7 @@
             "note": "Deploys a Collabora (CODE) instance to integrate with Nextcloud",
             "categories": ["app"],
             "platform": "linux",
-            "logo": "https://stack-templates.probesys.com/collabora.logo.png",
+            "logo": "https://raw.githubusercontent.com/Probesys/swarm-stacks-templates/main/collabora.logo.png",
             "repository": {
                 "url": "https://github.com/Probesys/swarm-stacks-templates",
                 "stackfile": "office-stack.yml"
