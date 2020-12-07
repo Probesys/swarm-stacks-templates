@@ -1,0 +1,87 @@
+{
+    "version": "2",
+    "templates": [
+        {
+            "type": 2,
+            "title": "Nextcloud",
+            "description": "Nextcloud instance with MariaDB and Redis",
+            "note": "Deploys a Nextcloud instance",
+            "categories": ["app"],
+            "platform": "linux",
+            "logo": "https://stack-templates.probesys.com/nextcloud.logo.png",
+            "repository": {
+                "url": "https://github.com/Probesys/swarm-stacks-templates",
+                "stackfile": "nextcloud-stack.yml"
+            },
+            "administrator_only": true,
+            "env": [
+                {
+                    "name": "MYSQL_DATABASE",
+                    "label": "database name",
+                    "description": "The name of the Nextcloud database"
+                },
+                {
+                    "name": "MYSQL_USER",
+                    "label": "database user name",
+                    "description": "The Nextcloud database user name"
+                },
+                {
+                    "name": "MYSQL_PASSWORD",
+                    "label": "database user password",
+                    "description": "The Nextcloud database user password"
+                },
+                {
+                    "name": "MYSQL_ROOT_PASSWORD",
+                    "label":"database password",
+                    "description": "The Nextcloud database root password"
+                },
+                {
+                    "name": "REDIS_PASSWD",
+                    "label": "redis password",
+                    "description": "The Redis server password"
+                },
+                {
+                    "name": "NEXTCLOUD_ADMIN_USER",
+                    "label": "nextcloud admin username",
+                    "description": "Nextcloud instance administrator name"
+                },
+                {
+                    "name": "NEXTCLOUD_ADMIN_PASSWORD",
+                    "label": "nextcloud admin password",
+                    "description":"Nextcloud instance administrator password"
+                },
+                {
+                    "name": "NC_DOMAIN",
+                    "label": "nextcloud domain name",
+                    "description": "Nextcloud instance URL"
+                }
+            ]
+        },
+        {
+            "type": 2,
+            "title": "Office",
+            "description": "Collabora Online instance",
+            "note": "Deploys a Collabora (CODE) instance to integrate with Nextcloud",
+            "categories": ["app"],
+            "platform": "linux",
+            "logo": "https://stack-templates.probesys.com/collabora.logo.png",
+            "repository": {
+                "url": "https://github.com/Probesys/swarm-stacks-templates",
+                "stackfile": "office-stack.yml"
+            },
+            "administrator_only": true,
+            "env": [
+                {
+                    "name": "NC_DOMAIN",
+                    "label": "nextcloud domain name",
+                    "description": "Nextcloud instance URL allowed to use this Collabora server"
+                },
+                {
+                    "name": "OFFICE_URL",
+                    "label": "office domain name",
+                    "description": "The Collabora instance domain name"
+                }
+            ]
+        }
+    ]
+}
