@@ -19,7 +19,7 @@ services:
         - "traefik.http.routers.{{ env \"OFFICE_URL\" }}.entrypoints=websecure"
         - "traefik.http.routers.{{ env \"OFFICE_URL\" }}.rule=Host(`${OFFICE_URL}`)"
         - "traefik.http.middlewares.{{ env \"OFFICE_URL\" }}.compress=true"
-        - "traefik.http.routers.{{ env \"OFFICE_URL\" }}.tls.certresolver=myresolver"
+        - "traefik.http.routers.{{ env \"OFFICE_URL\" }}.tls.certresolver=le"
         - "traefik.http.routers.{{ env \"OFFICE_URL\" }}.tls=true"
       replicas: 1
       resources:

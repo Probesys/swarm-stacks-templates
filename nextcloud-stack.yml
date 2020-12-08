@@ -58,7 +58,7 @@ services:
         - "traefik.http.routers.{{ env \"NC_DOMAIN\" }}.entrypoints=websecure"
         - "traefik.http.services.{{ env \"NC_DOMAIN\" }}.loadbalancer.server.port=80"
         - "traefik.http.routers.{{ env \"NC_DOMAIN\" }}.rule=Host(`${NC_DOMAIN}`)"
-        - "traefik.http.routers.{{ env \"NC_DOMAIN\" }}.tls.certresolver=myresolver"
+        - "traefik.http.routers.{{ env \"NC_DOMAIN\" }}.tls.certresolver=le"
         - "traefik.http.routers.{{ env \"NC_DOMAIN\" }}.tls=true"
         - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}-http.compress=true"
         - "traefik.http.middlewares.{{ env \"NC_DOMAIN\" }}-sec.headers.customFrameOptionsValue=SAMEORIGIN"
