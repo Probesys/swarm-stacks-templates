@@ -96,6 +96,25 @@ services:
         constraints:
           - "node.role==manager"
 
+  cron:
+    image: prob6/docker-cron-nextcloud:latest
+    restart: always
+    networks:
+      - nextcloud-internal
+    depends_on:
+      - app
+    volumes:
+      - nextcloud:/var/www/html
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '1'
+          memory: '128M'
+      placement:
+        constraints:
+          - "node.role==manager"
+
 volumes:
   db:
   nextcloud:
