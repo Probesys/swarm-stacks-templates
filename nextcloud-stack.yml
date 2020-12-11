@@ -97,7 +97,7 @@ services:
           - "node.role==manager"
 
   cron:
-    image: prob6/docker-cron-nextcloud:latest
+    image: probesys38/docker-cron-nextcloud:latest
     restart: always
     networks:
       - nextcloud-internal
