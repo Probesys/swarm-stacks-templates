@@ -16,6 +16,11 @@
             "administrator_only": true,
             "env": [
                 {
+                    "name": "STACK_NAME",
+                    "label": "this project name",
+                    "description": "The name identifying this Nextcloud stack"
+                },
+                {
                     "name": "MYSQL_DATABASE",
                     "label": "database name",
                     "description": "The name of the Nextcloud database"
