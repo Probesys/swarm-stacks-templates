@@ -97,14 +97,19 @@ services:
           - "node.role==manager"
 
   cron:
-    image: probesys38/docker-cron-nextcloud:latest
+    image: rcdailey/nextcloud-cronjob
     restart: always
-    networks:
-      - nextcloud-internal
+    network_mode: none
     depends_on:
       - app
     volumes:
-      - nextcloud:/var/www/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - TZ=Europe/Paris
+      - NEXTCLOUD_CONTAINER_NAME=app.*
+      - NEXTCLOUD_PROJECT_NAME=${STACK_NAME}
+      - NEXTCLOUD_CRON_MINUTE_INTERVAL=15
     deploy:
       replicas: 1
       resources:
