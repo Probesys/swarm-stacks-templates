@@ -77,6 +77,11 @@
             "administrator_only": true,
             "env": [
                 {
+                    "name": "STACK_NAME",
+                    "label": "this project name",
+                    "description": "The name identifying this Collabora stack"
+                },
+                {
                     "name": "NC_DOMAIN",
                     "label": "nextcloud domain name",
                     "description": "Nextcloud instance URL allowed to use this Collabora server"

@@ -15,12 +15,12 @@ services:
         - "traefik.enable=true"
         - "traefik.passHostHeader=true"
         - "traefik.docker.network=public"
-        - "traefik.http.services.{{ env \"OFFICE_URL\" }}.loadbalancer.server.port=9980"
-        - "traefik.http.routers.{{ env \"OFFICE_URL\" }}.entrypoints=websecure"
-        - "traefik.http.routers.{{ env \"OFFICE_URL\" }}.rule=Host(`${OFFICE_URL}`)"
-        - "traefik.http.middlewares.{{ env \"OFFICE_URL\" }}.compress=true"
-        - "traefik.http.routers.{{ env \"OFFICE_URL\" }}.tls.certresolver=le"
-        - "traefik.http.routers.{{ env \"OFFICE_URL\" }}.tls=true"
+        - "traefik.http.services.${STACK_NAME}.loadbalancer.server.port=9980"
+        - "traefik.http.routers.${STACK_NAME}.entrypoints=websecure"
+        - "traefik.http.routers.${STACK_NAME}.rule=Host(`${OFFICE_URL}`)"
+        - "traefik.http.middlewares.${STACK_NAME}.compress=true"
+        - "traefik.http.routers.${STACK_NAME}.tls.certresolver=le"
+        - "traefik.http.routers.${STACK_NAME}.tls=true"
       replicas: 1
       resources:
         limits:
